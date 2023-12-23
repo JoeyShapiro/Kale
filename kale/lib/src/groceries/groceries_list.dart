@@ -154,25 +154,31 @@ class _GroceryListState extends State<GroceryList>
                   offset: Offset(0, animTrans),
                   child: SizedBox(
                     width: animWidth,
-                    child: Column(
-                      children: [
-                        TextField(
-                          focusNode: focusAddItem,
-                          decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
-                                borderSide:
-                                    BorderSide(color: Colors.greenAccent)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100)),
-                                borderSide:
-                                    BorderSide(color: Colors.greenAccent)),
-                            hintText: 'Item',
-                          ),
-                        )
-                      ],
+                    child: DecoratedBox(
+                      decoration: const BoxDecoration(
+                        color: Colors.greenAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Column(
+                        children: [
+                          TextField(
+                            focusNode: focusAddItem,
+                            decoration: const InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100)),
+                                  borderSide:
+                                      BorderSide(color: Colors.greenAccent)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100)),
+                                  borderSide:
+                                      BorderSide(color: Colors.greenAccent)),
+                              hintText: 'Item',
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 )
