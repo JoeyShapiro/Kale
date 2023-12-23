@@ -158,9 +158,15 @@ class _GroceryListState extends State<GroceryList>
                       children: [
                         TextField(
                           focusNode: focusAddItem,
-                          cursorColor: Colors.green,
                           decoration: const InputDecoration(
-                            border: UnderlineInputBorder(
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100)),
+                                borderSide:
+                                    BorderSide(color: Colors.greenAccent)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100)),
                                 borderSide:
                                     BorderSide(color: Colors.greenAccent)),
                             hintText: 'Item',
