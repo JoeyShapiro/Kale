@@ -17,10 +17,10 @@ class GroceryList extends StatefulWidget {
 class _GroceryListState extends State<GroceryList>
     with SingleTickerProviderStateMixin {
   List<GroceryItem> items = const [
-    GroceryItem(1),
-    GroceryItem(2),
-    GroceryItem(3),
-    GroceryItem(4)
+    GroceryItem(1, 'white bread', '', null),
+    GroceryItem(2, 'flavor bread', '', null),
+    GroceryItem(3, 'cookies', '', null),
+    GroceryItem(4, 'frozen dinner', '', null)
   ];
 
   late Animation<double> animationScale;
