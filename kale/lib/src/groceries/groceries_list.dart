@@ -42,7 +42,6 @@ class _GroceryListState extends State<GroceryList>
       ..addListener(() {
         if (!focusAddItem.hasFocus) {
           controller.reverse();
-          showAddItem = false;
         }
       });
 
@@ -81,6 +80,8 @@ class _GroceryListState extends State<GroceryList>
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               focusAddItem.requestFocus();
+            } else if (status == AnimationStatus.dismissed) {
+              showAddItem = false;
             }
           });
   }
