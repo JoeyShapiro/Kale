@@ -37,17 +37,18 @@ class _GroceryListState extends State<GroceryList>
       true; // this has a negative offset, which mobile cannot click
 
   late FocusNode focusAddItem;
+  late FocusNode focusDropdown; // TODO might have to change for new idea
+  var addItemDropdown = true;
 
   @override
   void initState() {
     super.initState();
 
-    focusAddItem = FocusNode()
+    focusAddItem = FocusNode();
+    focusDropdown = FocusNode()
       ..addListener(() {
-        if (!focusAddItem.hasFocus) {
-          controller.reverse();
-          showButtons = false;
-        }
+        addItemDropdown = focusDropdown.hasFocus;
+        print(addItemDropdown);
       });
 
     // final maxWdith = MediaQuery.of(context).size.width;
@@ -172,56 +173,65 @@ class _GroceryListState extends State<GroceryList>
                       Offset(0, animsCoolThatWerePainToSetup ? animTrans : 0),
                   child: SizedBox(
                     width: animWidth,
-                    child: DecoratedBox(
-                      decoration: const BoxDecoration(
-                        color: Colors.greenAccent,
-                        borderRadius: BorderRadius.all(Radius.circular(25)),
-                      ),
-                      child: Column(
-                        children: [
-                          TextField(
-                            focusNode: focusAddItem,
-                            decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(100)),
-                                  borderSide:
-                                      BorderSide(color: Colors.greenAccent)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(100)),
-                                  borderSide:
-                                      BorderSide(color: Colors.greenAccent)),
-                              hintText: 'Item',
+                    child: TapRegion(
+                      onTapOutside: (event) {
+                        if (!addItemDropdown) {
+                          controller.reverse();
+                          showButtons = false;
+                        }
+                      },
+                      child: DecoratedBox(
+                        decoration: const BoxDecoration(
+                          color: Colors.greenAccent,
+                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                        ),
+                        child: Column(
+                          children: [
+                            TextField(
+                              focusNode: focusAddItem,
+                              decoration: const InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100)),
+                                    borderSide:
+                                        BorderSide(color: Colors.greenAccent)),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(100)),
+                                    borderSide:
+                                        BorderSide(color: Colors.greenAccent)),
+                                hintText: 'Item',
+                              ),
                             ),
-                          ),
-                          if (showButtons)
-                            Row(
-                              children: [
-                                DropdownButton(
-                                  items: categories
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {},
-                                ),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      print('comment');
-                                    },
-                                    child: const Text('Comments')),
-                                ElevatedButton(
-                                    onPressed: () {
-                                      print('add');
-                                    },
-                                    child: const Text('Add')),
-                              ],
-                            )
-                        ],
+                            if (showButtons)
+                              Row(
+                                children: [
+                                  DropdownButton(
+                                    focusNode: focusDropdown,
+                                    items: categories
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {},
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        print('comment');
+                                      },
+                                      child: const Text('Comments')),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        print('add');
+                                      },
+                                      child: const Text('Add')),
+                                ],
+                              )
+                          ],
+                        ),
                       ),
                     ),
                   ),
