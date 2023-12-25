@@ -31,6 +31,10 @@ class _GroceryListState extends State<GroceryList>
   var animTrans = 0.0;
   var showAddItem = false;
   var blur = 0.0;
+  var showButtons = false;
+  late List<String> categories;
+  final animsCoolThatWerePainToSetup =
+      true; // this has a negative offset, which mobile cannot click
 
   late FocusNode focusAddItem;
 
@@ -42,6 +46,7 @@ class _GroceryListState extends State<GroceryList>
       ..addListener(() {
         if (!focusAddItem.hasFocus) {
           controller.reverse();
+          showButtons = false;
         }
       });
 
@@ -51,6 +56,12 @@ class _GroceryListState extends State<GroceryList>
     Size size = view.physicalSize / view.devicePixelRatio;
     final maxWidth = size.width;
     final maxHeight = size.height;
+
+    categories = <String>[
+      'deli',
+      'frozen',
+      'pastry',
+    ];
 
     controller = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
@@ -80,6 +91,7 @@ class _GroceryListState extends State<GroceryList>
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
               focusAddItem.requestFocus();
+              showButtons = true;
             } else if (status == AnimationStatus.dismissed) {
               showAddItem = false;
             }
@@ -89,7 +101,7 @@ class _GroceryListState extends State<GroceryList>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: !animsCoolThatWerePainToSetup,
       appBar: AppBar(
         title: const Text('Items'),
         actions: [
@@ -111,53 +123,59 @@ class _GroceryListState extends State<GroceryList>
       // In contrast to the default ListView constructor, which requires
       // building all Widgets up front, the ListView.builder constructor lazily
       // builds Widgets as they’re scrolled into view.
-      body: Column(children: [
+      body: Stack(alignment: Alignment.bottomCenter, children: [
         // BackdropFilter(filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0), child: ???), // TODO has to be below child
-        Expanded(
-            child: ImageFiltered(
-          imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-          child: ListView.builder(
-            // Providing a restorationId allows the ListView to restore the
-            // scroll position when a user leaves and returns to the app after it
-            // has been killed while running in the background.
-            restorationId: 'sampleItemListView',
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              final item = items[index];
+        Column(
+          children: [
+            Expanded(
+                child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+              child: ListView.builder(
+                // Providing a restorationId allows the ListView to restore the
+                // scroll position when a user leaves and returns to the app after it
+                // has been killed while running in the background.
+                restorationId: 'sampleItemListView',
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final item = items[index];
 
-              return Dismissible(
-                key: Key(item.id.toString()),
-                background: Container(color: Colors.green),
-                child: ListTile(
-                    title: Text(item.name),
-                    leading: const CircleAvatar(
-                      // Display the Flutter Logo image asset.
-                      foregroundImage:
-                          AssetImage('assets/images/flutter_logo.png'),
-                    ),
-                    onTap: () {}),
-                onDismissed: (direction) {
-                  // Then show a snackbar.
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('${item.id} dismissed $direction')));
+                  return Dismissible(
+                    key: Key(item.id.toString()),
+                    background: Container(color: Colors.green),
+                    child: ListTile(
+                        title: Text(item.name),
+                        leading: const CircleAvatar(
+                          // Display the Flutter Logo image asset.
+                          foregroundImage:
+                              AssetImage('assets/images/flutter_logo.png'),
+                        ),
+                        onTap: () {}),
+                    onDismissed: (direction) {
+                      // Then show a snackbar.
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('${item.id} dismissed $direction')));
+                    },
+                  );
                 },
-              );
-            },
-          ),
-        )),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Stack(
-            children: [
-              if (showAddItem)
-                Transform.translate(
-                  offset: Offset(0, animTrans),
+              ),
+            )),
+          ],
+        ),
+        Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            if (showAddItem)
+              Positioned(
+                bottom: 0,
+                child: Transform.translate(
+                  offset:
+                      Offset(0, animsCoolThatWerePainToSetup ? animTrans : 0),
                   child: SizedBox(
                     width: animWidth,
                     child: DecoratedBox(
                       decoration: const BoxDecoration(
                         color: Colors.greenAccent,
-                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
                       ),
                       child: Column(
                         children: [
@@ -176,14 +194,43 @@ class _GroceryListState extends State<GroceryList>
                                       BorderSide(color: Colors.greenAccent)),
                               hintText: 'Item',
                             ),
-                          )
+                          ),
+                          if (showButtons)
+                            Row(
+                              children: [
+                                DropdownButton(
+                                  items: categories
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {},
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      print('comment');
+                                    },
+                                    child: const Text('Comments')),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      print('add');
+                                    },
+                                    child: const Text('Add')),
+                              ],
+                            )
                         ],
                       ),
                     ),
                   ),
-                )
-              else
-                ElevatedButton(
+                ),
+              )
+            else
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
                   style: TextButton.styleFrom(
                       foregroundColor: Colors.green,
                       backgroundColor: Colors.greenAccent),
@@ -193,8 +240,8 @@ class _GroceryListState extends State<GroceryList>
                   },
                   child: const Text('Add Item'),
                 ),
-            ],
-          ),
+              ),
+          ],
         ),
       ]),
     );
