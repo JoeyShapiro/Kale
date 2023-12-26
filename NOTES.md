@@ -61,3 +61,17 @@ should try for scanning. maybe i can get category from it
 but this is fine for starrting
 
 this is better, but should do a raw, for control, and add the nodes to the gesture group
+
+https://world.openfoodfacts.org/product/5449000214911/coca-cola
+need a flutter barcode scanner
+is that cheating?
+
+make widget line up with keyboard
+    should it be basd on size
+move widget to its own class
+make cool anims a setting
+make category look better
+make the buttons look better
+day night mode
+start working on list
+able to add items

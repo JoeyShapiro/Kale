@@ -175,84 +175,119 @@ class _GroceryListState extends State<GroceryList>
                           showButtons = false;
                         }
                       },
-                      child: DecoratedBox(
-                        decoration: const BoxDecoration(
-                          color: Colors.greenAccent,
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
-                        ),
-                        child: Column(
-                          children: [
-                            TextField(
-                              focusNode: focusAddItem,
-                              decoration: const InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(100)),
-                                    borderSide:
-                                        BorderSide(color: Colors.greenAccent)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(100)),
-                                    borderSide:
-                                        BorderSide(color: Colors.greenAccent)),
-                                hintText: 'Item',
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DecoratedBox(
+                          decoration: const BoxDecoration(
+                            color: Colors.greenAccent,
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                          ),
+                          child: Column(
+                            children: [
+                              TextField(
+                                focusNode: focusAddItem,
+                                decoration: const InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100)),
+                                      borderSide: BorderSide(
+                                          color: Colors.greenAccent)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(100)),
+                                      borderSide: BorderSide(
+                                          color: Colors.greenAccent)),
+                                  hintText: 'New Item...',
+                                ),
                               ),
-                            ),
-                            if (showButtons)
-                              Row(
-                                children: [
-                                  Flexible(
-                                    child: Autocomplete<String>(
-                                      // TODO maybe do raw
-                                      fieldViewBuilder: (
-                                        BuildContext context,
-                                        TextEditingController
-                                            textEditingController,
-                                        FocusNode focusNode,
-                                        VoidCallback onFieldSubmitted,
-                                      ) {
-                                        focusNode.addListener(() {
-                                          addItemDropdown = focusNode.hasFocus;
-                                        });
-                                        return TextFormField(
-                                          controller: textEditingController,
-                                          focusNode: focusNode,
-                                          onFieldSubmitted: (String value) {
-                                            onFieldSubmitted();
-                                          },
-                                        );
-                                      },
-                                      optionsBuilder:
-                                          (TextEditingValue textEditingValue) {
-                                        if (textEditingValue.text == '') {
-                                          return const Iterable<String>.empty();
-                                        }
-                                        return categories
-                                            .where((String option) {
-                                          return option.contains(
-                                              textEditingValue.text
-                                                  .toLowerCase());
-                                        });
-                                      },
-                                      onSelected: (String selection) {
-                                        debugPrint(
-                                            'You just selected $selection');
-                                      },
+                              if (showButtons)
+                                Row(
+                                  children: [
+                                    Flexible(
+                                      child: Autocomplete<String>(
+                                        // TODO maybe do raw
+                                        fieldViewBuilder: (
+                                          BuildContext context,
+                                          TextEditingController
+                                              textEditingController,
+                                          FocusNode focusNode,
+                                          VoidCallback onFieldSubmitted,
+                                        ) {
+                                          focusNode.addListener(() {
+                                            addItemDropdown =
+                                                focusNode.hasFocus;
+                                          });
+                                          return TextFormField(
+                                            decoration: const InputDecoration(
+                                              enabledBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(100)),
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          Colors.greenAccent)),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(100)),
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          Colors.greenAccent)),
+                                              hintText: 'Category',
+                                            ),
+                                            controller: textEditingController,
+                                            focusNode: focusNode,
+                                            onFieldSubmitted: (String value) {
+                                              onFieldSubmitted();
+                                            },
+                                          );
+                                        },
+                                        optionsBuilder: (TextEditingValue
+                                            textEditingValue) {
+                                          if (textEditingValue.text == '') {
+                                            return const Iterable<
+                                                String>.empty();
+                                          }
+                                          return categories
+                                              .where((String option) {
+                                            return option.contains(
+                                                textEditingValue.text
+                                                    .toLowerCase());
+                                          });
+                                        },
+                                        onSelected: (String selection) {
+                                          debugPrint(
+                                              'You just selected $selection');
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        print('comment');
-                                      },
-                                      child: const Text('Comments')),
-                                  ElevatedButton(
-                                      onPressed: () {
-                                        print('add');
-                                      },
-                                      child: const Text('+')),
-                                ],
-                              )
-                          ],
+                                    ElevatedButton(
+                                        style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.zero,
+                                        ))),
+                                        onPressed: () {
+                                          print('comment');
+                                        },
+                                        child: const Text('Comments')),
+                                    ElevatedButton(
+                                        style: ButtonStyle(
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.horizontal(
+                                              right: Radius.circular(25.0)),
+                                        ))),
+                                        onPressed: () {
+                                          print('add');
+                                        },
+                                        child: const Text('+')),
+                                  ],
+                                )
+                            ],
+                          ),
                         ),
                       ),
                     ),
