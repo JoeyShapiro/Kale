@@ -38,18 +38,13 @@ class _GroceryListState extends State<GroceryList>
 
   late FocusNode focusAddItem;
   late FocusNode focusDropdown; // TODO might have to change for new idea
-  var addItemDropdown = true;
+  var addItemDropdown = false;
 
   @override
   void initState() {
     super.initState();
 
     focusAddItem = FocusNode();
-    focusDropdown = FocusNode()
-      ..addListener(() {
-        addItemDropdown = focusDropdown.hasFocus;
-        print(addItemDropdown);
-      });
 
     // final maxWdith = MediaQuery.of(context).size.width;
     FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
@@ -206,17 +201,44 @@ class _GroceryListState extends State<GroceryList>
                             if (showButtons)
                               Row(
                                 children: [
-                                  DropdownButton(
-                                    focusNode: focusDropdown,
-                                    items: categories
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {},
+                                  Flexible(
+                                    child: Autocomplete<String>(
+                                      // TODO maybe do raw
+                                      fieldViewBuilder: (
+                                        BuildContext context,
+                                        TextEditingController
+                                            textEditingController,
+                                        FocusNode focusNode,
+                                        VoidCallback onFieldSubmitted,
+                                      ) {
+                                        focusNode.addListener(() {
+                                          addItemDropdown = focusNode.hasFocus;
+                                        });
+                                        return TextFormField(
+                                          controller: textEditingController,
+                                          focusNode: focusNode,
+                                          onFieldSubmitted: (String value) {
+                                            onFieldSubmitted();
+                                          },
+                                        );
+                                      },
+                                      optionsBuilder:
+                                          (TextEditingValue textEditingValue) {
+                                        if (textEditingValue.text == '') {
+                                          return const Iterable<String>.empty();
+                                        }
+                                        return categories
+                                            .where((String option) {
+                                          return option.contains(
+                                              textEditingValue.text
+                                                  .toLowerCase());
+                                        });
+                                      },
+                                      onSelected: (String selection) {
+                                        debugPrint(
+                                            'You just selected $selection');
+                                      },
+                                    ),
                                   ),
                                   ElevatedButton(
                                       onPressed: () {
@@ -227,7 +249,7 @@ class _GroceryListState extends State<GroceryList>
                                       onPressed: () {
                                         print('add');
                                       },
-                                      child: const Text('Add')),
+                                      child: const Text('+')),
                                 ],
                               )
                           ],

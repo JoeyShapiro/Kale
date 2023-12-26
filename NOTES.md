@@ -56,3 +56,8 @@ but it gets in the way. it wouldnt work for end goal
 i want dropdown input, so might as well test on it.
 should work differently, so just use that
 yeah, not gonna use it so whatever
+
+should try for scanning. maybe i can get category from it
+but this is fine for starrting
+
+this is better, but should do a raw, for control, and add the nodes to the gesture group
