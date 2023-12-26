@@ -75,3 +75,11 @@ make the buttons look better
 day night mode
 start working on list
 able to add items
+
+cant think of it. so additional would get messy
+yeah, if thats the case. then i think i need it
+
+they are only needed in init, but now they arent
+play right, and its fine
+
+are these only called once, or when it built everytimew

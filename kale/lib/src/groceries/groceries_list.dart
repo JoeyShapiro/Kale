@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../settings/settings_view.dart';
 import 'grocery_item.dart';
+import 'transforming_button.dart';
 
 class GroceryList extends StatefulWidget {
   const GroceryList({super.key});
@@ -14,44 +15,38 @@ class GroceryList extends StatefulWidget {
   State<GroceryList> createState() => _GroceryListState();
 }
 
-class _GroceryListState extends State<GroceryList>
-    with SingleTickerProviderStateMixin {
+class _GroceryListState extends State<GroceryList> {
   List<GroceryItem> items = const [
     GroceryItem(1, 'white bread', '', null),
     GroceryItem(2, 'flavor bread', '', null),
     GroceryItem(3, 'cookies', '', null),
     GroceryItem(4, 'frozen dinner', '', null)
   ];
-
-  late Animation<double> animationScale;
-  late Animation<double> animationTrans;
-  late Animation<double> animationBlur;
-  late AnimationController controller;
-  var animWidth = 200.0;
-  var animTrans = 0.0;
-  var showAddItem = false;
-  var blur = 0.0;
-  var showButtons = false;
   late List<String> categories;
-  final animsCoolThatWerePainToSetup =
-      true; // this has a negative offset, which mobile cannot click
 
+  final animsCoolThatWerePainToSetup = true;
+  var blur = 0.0;
   late FocusNode focusAddItem;
-  late FocusNode focusDropdown; // TODO might have to change for new idea
+  late FocusNode focusDropdown;
+  late Animation<double> animationBlur;
+
+  var showButtons = false;
   var addItemDropdown = false;
+
+  late double maxWidth;
+  late double position;
 
   @override
   void initState() {
     super.initState();
 
-    focusAddItem = FocusNode();
-
     // final maxWdith = MediaQuery.of(context).size.width;
     FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
     // Dimensions in logical pixels (dp)
     Size size = view.physicalSize / view.devicePixelRatio;
-    final maxWidth = size.width;
+    maxWidth = size.width;
     final maxHeight = size.height;
+    position = -maxHeight / 2;
 
     categories = <String>[
       'deli',
@@ -59,39 +54,7 @@ class _GroceryListState extends State<GroceryList>
       'pastry',
     ];
 
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 300), vsync: this);
-    animationScale =
-        Tween<double>(begin: 200, end: maxWidth).animate(controller)
-          ..addListener(() {
-            setState(() {
-              // The state that has changed here is the animation object's value.
-              animWidth = animationScale.value;
-            });
-          });
-    animationBlur = Tween<double>(begin: 0, end: 5).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // The state that has changed here is the animation object's value.
-          blur = animationBlur.value;
-        });
-      });
-    animationTrans =
-        Tween<double>(begin: 0, end: -maxHeight / 2).animate(controller)
-          ..addListener(() {
-            setState(() {
-              // The state that has changed here is the animation object's value.
-              animTrans = animationTrans.value;
-            });
-          })
-          ..addStatusListener((status) {
-            if (status == AnimationStatus.completed) {
-              focusAddItem.requestFocus();
-              showButtons = true;
-            } else if (status == AnimationStatus.dismissed) {
-              showAddItem = false;
-            }
-          });
+    focusAddItem = FocusNode();
   }
 
   @override
@@ -157,35 +120,69 @@ class _GroceryListState extends State<GroceryList>
             )),
           ],
         ),
-        Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            if (showAddItem)
-              Positioned(
-                bottom: 0,
-                child: Transform.translate(
-                  offset:
-                      Offset(0, animsCoolThatWerePainToSetup ? animTrans : 0),
-                  child: SizedBox(
-                    width: animWidth,
-                    child: TapRegion(
-                      onTapOutside: (event) {
-                        if (!addItemDropdown) {
-                          controller.reverse();
-                          showButtons = false;
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DecoratedBox(
-                          decoration: const BoxDecoration(
-                            color: Colors.greenAccent,
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                          ),
-                          child: Column(
-                            children: [
-                              TextField(
-                                focusNode: focusAddItem,
+        TransformingButton(
+          animationBuilder: (controller) {
+            animationBlur = Tween<double>(begin: 0, end: 5).animate(controller)
+              ..addListener(() {
+                setState(() {
+                  // The state that has changed here is the animation object's value.
+                  blur = animationBlur.value;
+                });
+              });
+
+            return controller;
+          },
+          milliseconds: 300,
+          width: maxWidth,
+          position: position,
+          shouldClose: () {
+            if (!addItemDropdown) {
+              showButtons = false;
+            }
+            return !addItemDropdown;
+          },
+          onAnimFinish: () {
+            focusAddItem.requestFocus();
+            showButtons = true;
+          },
+          button: const Text('Add Item'),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                color: Colors.greenAccent,
+                borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              child: Column(
+                children: [
+                  TextField(
+                    focusNode: focusAddItem,
+                    decoration: const InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          borderSide: BorderSide(color: Colors.greenAccent)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(100)),
+                          borderSide: BorderSide(color: Colors.greenAccent)),
+                      hintText: 'New Item...',
+                    ),
+                  ),
+                  if (showButtons)
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Autocomplete<String>(
+                            // TODO maybe do raw
+                            fieldViewBuilder: (
+                              BuildContext context,
+                              TextEditingController textEditingController,
+                              FocusNode focusNode,
+                              VoidCallback onFieldSubmitted,
+                            ) {
+                              focusNode.addListener(() {
+                                addItemDropdown = focusNode.hasFocus;
+                              });
+                              return TextFormField(
                                 decoration: const InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -197,118 +194,59 @@ class _GroceryListState extends State<GroceryList>
                                           Radius.circular(100)),
                                       borderSide: BorderSide(
                                           color: Colors.greenAccent)),
-                                  hintText: 'New Item...',
+                                  hintText: 'Category',
                                 ),
-                              ),
-                              if (showButtons)
-                                Row(
-                                  children: [
-                                    Flexible(
-                                      child: Autocomplete<String>(
-                                        // TODO maybe do raw
-                                        fieldViewBuilder: (
-                                          BuildContext context,
-                                          TextEditingController
-                                              textEditingController,
-                                          FocusNode focusNode,
-                                          VoidCallback onFieldSubmitted,
-                                        ) {
-                                          focusNode.addListener(() {
-                                            addItemDropdown =
-                                                focusNode.hasFocus;
-                                          });
-                                          return TextFormField(
-                                            decoration: const InputDecoration(
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(100)),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Colors.greenAccent)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(100)),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Colors.greenAccent)),
-                                              hintText: 'Category',
-                                            ),
-                                            controller: textEditingController,
-                                            focusNode: focusNode,
-                                            onFieldSubmitted: (String value) {
-                                              onFieldSubmitted();
-                                            },
-                                          );
-                                        },
-                                        optionsBuilder: (TextEditingValue
-                                            textEditingValue) {
-                                          if (textEditingValue.text == '') {
-                                            return const Iterable<
-                                                String>.empty();
-                                          }
-                                          return categories
-                                              .where((String option) {
-                                            return option.contains(
-                                                textEditingValue.text
-                                                    .toLowerCase());
-                                          });
-                                        },
-                                        onSelected: (String selection) {
-                                          debugPrint(
-                                              'You just selected $selection');
-                                        },
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                        style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.zero,
-                                        ))),
-                                        onPressed: () {
-                                          print('comment');
-                                        },
-                                        child: const Text('Comments')),
-                                    ElevatedButton(
-                                        style: ButtonStyle(
-                                            shape: MaterialStateProperty.all<
-                                                    RoundedRectangleBorder>(
-                                                const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.horizontal(
-                                              right: Radius.circular(25.0)),
-                                        ))),
-                                        onPressed: () {
-                                          print('add');
-                                        },
-                                        child: const Text('+')),
-                                  ],
-                                )
-                            ],
+                                controller: textEditingController,
+                                focusNode: focusNode,
+                                onFieldSubmitted: (String value) {
+                                  onFieldSubmitted();
+                                },
+                              );
+                            },
+                            optionsBuilder:
+                                (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text == '') {
+                                return const Iterable<String>.empty();
+                              }
+                              return categories.where((String option) {
+                                return option.contains(
+                                    textEditingValue.text.toLowerCase());
+                              });
+                            },
+                            onSelected: (String selection) {
+                              debugPrint('You just selected $selection');
+                            },
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            else
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  style: TextButton.styleFrom(
-                      foregroundColor: Colors.green,
-                      backgroundColor: Colors.greenAccent),
-                  onPressed: () {
-                    showAddItem = true;
-                    controller.forward();
-                  },
-                  child: const Text('Add Item'),
-                ),
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ))),
+                            onPressed: () {
+                              print('comment');
+                            },
+                            child: const Text('Comments')),
+                        ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                        RoundedRectangleBorder>(
+                                    const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.horizontal(
+                                  right: Radius.circular(25.0)),
+                            ))),
+                            onPressed: () {
+                              print('add');
+                            },
+                            child: const Text('+')),
+                      ],
+                    )
+                ],
               ),
-          ],
+            ),
+          ),
         ),
       ]),
     );
@@ -316,7 +254,7 @@ class _GroceryListState extends State<GroceryList>
 
   @override
   void dispose() {
-    controller.dispose();
+    focusDropdown.dispose();
     focusAddItem.dispose();
     super.dispose();
   }
