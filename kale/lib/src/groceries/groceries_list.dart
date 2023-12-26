@@ -19,12 +19,7 @@ class GroceryList extends StatefulWidget {
 }
 
 class _GroceryListState extends State<GroceryList> {
-  List<GroceryItem> items = const [
-    GroceryItem(1, 'white bread', '', null),
-    GroceryItem(2, 'flavor bread', '', null),
-    GroceryItem(3, 'cookies', '', 'always could use cookies'),
-    GroceryItem(4, 'frozen dinner', '', null)
-  ];
+  late List<GroceryItem> items;
   late List<String> categories;
 
   var blur = 0.0;
@@ -37,6 +32,9 @@ class _GroceryListState extends State<GroceryList> {
 
   late double maxWidth;
   late double position;
+
+  late TextEditingController itemName;
+  late TextEditingController itemCategory;
 
   @override
   void initState() {
@@ -56,7 +54,15 @@ class _GroceryListState extends State<GroceryList> {
       'pastry',
     ];
 
+    items = <GroceryItem>[
+      const GroceryItem(1, 'white bread', '', null),
+      const GroceryItem(2, 'flavor bread', '', null),
+      const GroceryItem(3, 'cookies', '', 'always could use cookies'),
+      const GroceryItem(4, 'frozen dinner', '', null)
+    ];
+
     focusAddItem = FocusNode();
+    itemName = TextEditingController();
   }
 
   @override
@@ -161,6 +167,7 @@ class _GroceryListState extends State<GroceryList> {
               child: Column(
                 children: [
                   TextField(
+                    controller: itemName,
                     focusNode: focusAddItem,
                     decoration: const InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -187,6 +194,8 @@ class _GroceryListState extends State<GroceryList> {
                               focusNode.addListener(() {
                                 addItemDropdown = focusNode.hasFocus;
                               });
+                              itemCategory = textEditingController;
+
                               return TextFormField(
                                 decoration: const InputDecoration(
                                   enabledBorder: OutlineInputBorder(
@@ -243,7 +252,15 @@ class _GroceryListState extends State<GroceryList> {
                                   right: Radius.circular(25.0)),
                             ))),
                             onPressed: () {
-                              print('add');
+                              final name = itemName.text;
+                              final category = itemCategory.text;
+                              final comments = '';
+                              print('add "$name" "$category" "$comments"');
+                              items.add(
+                                  GroceryItem(-1, name, category, comments));
+
+                              itemName.text = '';
+                              itemCategory.text = '';
                             },
                             child: const Text('+')),
                       ],
@@ -261,6 +278,9 @@ class _GroceryListState extends State<GroceryList> {
   void dispose() {
     focusDropdown.dispose();
     focusAddItem.dispose();
+
+    itemName.dispose();
+
     super.dispose();
   }
 }
