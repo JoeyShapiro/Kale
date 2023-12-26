@@ -120,9 +120,13 @@ class _GroceryListState extends State<GroceryList> {
                         ),
                         onTap: () {}),
                     onDismissed: (direction) {
-                      // Then show a snackbar.
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('${item.id} dismissed $direction')));
+                      final success = items.remove(item);
+                      if (!success) {
+                        // only show snackbar for error
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(
+                                'error: $success: ${item.id} dismissed $direction')));
+                      }
                     },
                   );
                 },
