@@ -88,3 +88,9 @@ oh the service and controller crap. ugh
 could use an acutal api search. with items and shit
 but this good for now
 should i create a new list everytime. we will see what i need to do. but its minor stuff
+how could i programmatically change icon. i will find out. must be way. but actual good pkg
+maybe dont use font awesom, but i have it.
+should i have to lists, no cant
+one list with categroy
+have that one on the bottom
+make that category different, or add it on top of

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../settings/settings_controller.dart';
 
 import '../settings/settings_view.dart';
@@ -108,7 +109,20 @@ class _GroceryListState extends State<GroceryList> {
 
                   return Dismissible(
                     key: Key(item.id.toString()),
-                    background: Container(color: Colors.green),
+                    background: Container(
+                      color: Colors.green,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
+                            Icons.front_hand_rounded,
+                          ),
+                          Icon(
+                            Icons.front_hand_rounded,
+                          ),
+                        ],
+                      ),
+                    ),
                     child: ListTile(
                         title: Text(item.name),
                         subtitle:
