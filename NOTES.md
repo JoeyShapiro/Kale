@@ -85,3 +85,5 @@ play right, and its fine
 are these only called once, or when it built everytimew
 
 oh the service and controller crap. ugh
+could use an acutal api search. with items and shit
+but this good for now

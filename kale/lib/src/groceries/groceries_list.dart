@@ -22,7 +22,7 @@ class _GroceryListState extends State<GroceryList> {
   List<GroceryItem> items = const [
     GroceryItem(1, 'white bread', '', null),
     GroceryItem(2, 'flavor bread', '', null),
-    GroceryItem(3, 'cookies', '', null),
+    GroceryItem(3, 'cookies', '', 'always could use cookies'),
     GroceryItem(4, 'frozen dinner', '', null)
   ];
   late List<String> categories;
@@ -105,6 +105,8 @@ class _GroceryListState extends State<GroceryList> {
                     background: Container(color: Colors.green),
                     child: ListTile(
                         title: Text(item.name),
+                        subtitle:
+                            item.comments != null ? Text(item.comments!) : null,
                         leading: const CircleAvatar(
                           // Display the Flutter Logo image asset.
                           foregroundImage:

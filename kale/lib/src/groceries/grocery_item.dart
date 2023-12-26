@@ -4,11 +4,11 @@ class GroceryItem {
     this.id,
     this.name,
     this.category,
-    this.description,
+    this.comments,
   );
 
   final int id;
   final String name;
   final String category; // maybe use a number and have a list of Category
-  final String? description;
+  final String? comments;
 }
