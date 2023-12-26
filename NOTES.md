@@ -83,3 +83,5 @@ they are only needed in init, but now they arent
 play right, and its fine
 
 are these only called once, or when it built everytimew
+
+oh the service and controller crap. ugh

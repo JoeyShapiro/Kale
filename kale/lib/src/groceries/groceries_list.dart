@@ -1,13 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import '../settings/settings_controller.dart';
 
 import '../settings/settings_view.dart';
 import 'grocery_item.dart';
 import 'transforming_button.dart';
 
 class GroceryList extends StatefulWidget {
-  const GroceryList({super.key});
+  final SettingsController settings;
+
+  const GroceryList({super.key, required this.settings});
 
   static const routeName = '/';
 
@@ -24,7 +27,6 @@ class _GroceryListState extends State<GroceryList> {
   ];
   late List<String> categories;
 
-  final animsCoolThatWerePainToSetup = true;
   var blur = 0.0;
   late FocusNode focusAddItem;
   late FocusNode focusDropdown;
@@ -60,7 +62,7 @@ class _GroceryListState extends State<GroceryList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: !animsCoolThatWerePainToSetup,
+      resizeToAvoidBottomInset: !widget.settings.fancyAnims,
       appBar: AppBar(
         title: const Text('Items'),
         actions: [
@@ -121,6 +123,7 @@ class _GroceryListState extends State<GroceryList> {
           ],
         ),
         TransformingButton(
+          animsCoolThatWerePainToSetup: widget.settings.fancyAnims,
           animationBuilder: (controller) {
             animationBlur = Tween<double>(begin: 0, end: 5).animate(controller)
               ..addListener(() {

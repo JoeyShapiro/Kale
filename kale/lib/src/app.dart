@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
                     return const SampleItemDetailsView();
                   case GroceryList.routeName:
                   default:
-                    return const GroceryList();
+                    return GroceryList(settings: settingsController);
                 }
               },
             );
