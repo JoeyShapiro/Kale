@@ -56,10 +56,10 @@ class _GroceryListState extends State<GroceryList> {
     ];
 
     items = <GroceryItem>[
-      const GroceryItem(1, 'white bread', '', null),
-      const GroceryItem(2, 'flavor bread', '', null),
-      const GroceryItem(3, 'cookies', '', 'always could use cookies'),
-      const GroceryItem(4, 'frozen dinner', '', null)
+      const GroceryItem(1, 'white bread', 'pastry', null),
+      const GroceryItem(2, 'flavor bread', 'pastry', null),
+      const GroceryItem(3, 'cookies', 'deli', 'always could use cookies'),
+      const GroceryItem(4, 'frozen dinner', 'frozen', 'something different')
     ];
 
     focusAddItem = FocusNode();
@@ -118,7 +118,7 @@ class _GroceryListState extends State<GroceryList> {
                             Icons.front_hand_rounded,
                           ),
                           Icon(
-                            Icons.front_hand_rounded,
+                            Icons.check,
                           ),
                         ],
                       ),

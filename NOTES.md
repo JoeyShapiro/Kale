@@ -94,3 +94,8 @@ should i have to lists, no cant
 one list with categroy
 have that one on the bottom
 make that category different, or add it on top of
+
+should i just create one big list
+but have separate stuff for everything.. and put it all together
+should the category be collected though
+why not. they are not needed anymore
