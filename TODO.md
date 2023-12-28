@@ -2,4 +2,14 @@
   - [ ] hamburger
   - [ ] list
     - [ ] categories
+    - [ ] "quick select" categories
+      - [ ] like the alphabet thing in ios
+      - [ ] could use the hamburger thing
+      - [ ] could make my own thing
+        - [ ] show all categories in a section thing
+      - [ ] but do this part later
+    - [ ] collected
+      - [ ] have it as gray in the category
+  - [ ] settings
+    - [ ] add button placement
 - [ ] backend
