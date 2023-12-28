@@ -3,13 +3,18 @@
   - [ ] list
     - [ ] categories
     - [ ] "quick select" categories
+      - [ ] find out jumping
       - [ ] like the alphabet thing in ios
       - [ ] could use the hamburger thing
       - [ ] could make my own thing
         - [ ] show all categories in a section thing
       - [ ] but do this part later
+      - [ ] but where would the button go. doesnt need common use
     - [ ] collected
       - [ ] have it as gray in the category
   - [ ] settings
     - [ ] add button placement
+  - [ ] delete option
+    - [ ] use toast with undo
+    - [ ] flip add button
 - [ ] backend
