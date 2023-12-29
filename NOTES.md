@@ -99,3 +99,5 @@ should i just create one big list
 but have separate stuff for everything.. and put it all together
 should the category be collected though
 why not. they are not needed anymore
+
+could use different list view. but this seems the proper way. have most control, and wasnt *that* hard

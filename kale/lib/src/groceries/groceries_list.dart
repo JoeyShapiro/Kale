@@ -99,52 +99,72 @@ class _GroceryListState extends State<GroceryList> {
                 child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
               child: ListView.builder(
-                // Providing a restorationId allows the ListView to restore the
-                // scroll position when a user leaves and returns to the app after it
-                // has been killed while running in the background.
-                restorationId: 'sampleItemListView',
-                itemCount: items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final item = items[index];
+                  itemCount: categories.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final categoryItems = items
+                        .where(
+                          (element) => element.category == categories[index],
+                        )
+                        .toList(growable: false);
+                    return Column(
+                      children: [
+                        Text(categories[index]),
+                        const Divider(),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          // Providing a restorationId allows the ListView to restore the
+                          // scroll position when a user leaves and returns to the app after it
+                          // has been killed while running in the background.
+                          restorationId: 'sampleItemListView',
+                          itemCount: categoryItems.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final item = categoryItems[index];
 
-                  return Dismissible(
-                    key: Key(item.id.toString()),
-                    background: Container(
-                      color: Colors.green,
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Icons.front_hand_rounded,
-                          ),
-                          Icon(
-                            Icons.check,
-                          ),
-                        ],
-                      ),
-                    ),
-                    child: ListTile(
-                        title: Text(item.name),
-                        subtitle:
-                            item.comments != null ? Text(item.comments!) : null,
-                        leading: const CircleAvatar(
-                          // Display the Flutter Logo image asset.
-                          foregroundImage:
-                              AssetImage('assets/images/flutter_logo.png'),
+                            return Dismissible(
+                              key: Key(item.id.toString()),
+                              background: Container(
+                                color: Colors.green,
+                                child: const Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.front_hand_rounded,
+                                    ),
+                                    Icon(
+                                      Icons.check,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              child: ListTile(
+                                  title: Text(item.name),
+                                  subtitle: item.comments != null
+                                      ? Text(item.comments!)
+                                      : null,
+                                  leading: const CircleAvatar(
+                                    // Display the Flutter Logo image asset.
+                                    foregroundImage: AssetImage(
+                                        'assets/images/flutter_logo.png'),
+                                  ),
+                                  onTap: () {}),
+                              onDismissed: (direction) {
+                                final success = items.remove(item);
+                                if (!success) {
+                                  // only show snackbar for error
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              'error: $success: ${item.id} dismissed $direction')));
+                                }
+                              },
+                            );
+                          },
                         ),
-                        onTap: () {}),
-                    onDismissed: (direction) {
-                      final success = items.remove(item);
-                      if (!success) {
-                        // only show snackbar for error
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'error: $success: ${item.id} dismissed $direction')));
-                      }
-                    },
-                  );
-                },
-              ),
+                      ],
+                    );
+                  }),
             )),
           ],
         ),

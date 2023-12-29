@@ -1,5 +1,6 @@
 - [ ] frontend
   - [ ] hamburger
+  - [ ] current item modal
   - [ ] list
     - [ ] categories
     - [ ] "quick select" categories
