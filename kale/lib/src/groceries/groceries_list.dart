@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import '../settings/settings_controller.dart';
 
 import '../settings/settings_view.dart';
@@ -56,10 +57,14 @@ class _GroceryListState extends State<GroceryList> {
     ];
 
     items = <GroceryItem>[
-      const GroceryItem(1, 'white bread', 'pastry', null),
-      const GroceryItem(2, 'flavor bread', 'pastry', null),
-      const GroceryItem(3, 'cookies', 'deli', 'always could use cookies'),
-      const GroceryItem(4, 'frozen dinner', 'frozen', 'something different')
+      GroceryItem(1, 'white bread', 'pastry', null, false, null, null, "bob",
+          DateTime.now()),
+      GroceryItem(2, 'flavor bread', 'pastry', null, false, true, true, "alice",
+          DateTime.now()),
+      GroceryItem(3, 'cookies', 'deli', 'always could use cookies', false, null,
+          null, "zelda", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now())
     ];
 
     focusAddItem = FocusNode();
@@ -148,7 +153,54 @@ class _GroceryListState extends State<GroceryList> {
                                     foregroundImage: AssetImage(
                                         'assets/images/flutter_logo.png'),
                                   ),
-                                  onTap: () {}),
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AboutDialog(
+                                          applicationName: "View Item",
+                                          children: [
+                                            Column(children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text("Name"),
+                                                  Text(item.name),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const Text("Category"),
+                                                  Text(item.category),
+                                                ],
+                                              ),
+                                              const Divider(),
+                                              const Text("Comments"),
+                                              Text(item.comments ?? ""),
+                                              const Divider(),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(item.addedBy),
+                                                  Text(DateFormat(
+                                                          "MM-dd-yy kk:mm")
+                                                      .format(
+                                                          item.lastUpdated)),
+                                                ],
+                                              ),
+                                            ])
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }),
                               onDismissed: (direction) {
                                 final success = items.remove(item);
                                 if (!success) {
@@ -294,8 +346,16 @@ class _GroceryListState extends State<GroceryList> {
                               final category = itemCategory.text;
                               final comments = '';
                               print('add "$name" "$category" "$comments"');
-                              items.add(
-                                  GroceryItem(-1, name, category, comments));
+                              items.add(GroceryItem(
+                                  -1,
+                                  name,
+                                  category,
+                                  comments,
+                                  false,
+                                  null,
+                                  null,
+                                  "bob",
+                                  DateTime.now()));
 
                               itemName.text = '';
                               itemCategory.text = '';

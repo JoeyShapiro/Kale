@@ -1,4 +1,8 @@
 - [ ] frontend
+  - [ ] edit modal
+  - [ ] login
+    - [ ] stay on list page
+    - [ ] if fail go to login
   - [ ] hamburger
   - [ ] current item modal
   - [ ] list
@@ -15,7 +19,24 @@
       - [ ] have it as gray in the category
   - [ ] settings
     - [ ] add button placement
+    - [ ] precompile after
+      - [ ] maybe just never precompile
   - [ ] delete option
     - [ ] use toast with undo
     - [ ] flip add button
 - [ ] backend
+  - [ ] session
+  - [ ] actions
+    - [ ] wont have list of items, but actions
+  - [ ] importance
+    - [ ] important
+      - [ ] have to get it NOW
+      - [ ] even if not shopping
+    - [ ] normal
+    - [ ] not important
+      - [ ] can get it at a later date
+      - [ ] even if shopping
+  - [ ] match
+    - [ ] exact
+- [ ] docker
+  - [ ] simulator in container
