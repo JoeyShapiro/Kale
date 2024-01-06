@@ -101,3 +101,9 @@ should the category be collected though
 why not. they are not needed anymore
 
 could use different list view. but this seems the proper way. have most control, and wasnt *that* hard
+
+could make separate list for collected, but dont like. gets over done. i think i can do all one list
+the list might need to grow. if i keep it
+
+i think this is the best way to handle it. what if thy have the name, or kepp it indepent
+cant have to list views

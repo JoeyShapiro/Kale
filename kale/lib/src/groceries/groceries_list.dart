@@ -57,7 +57,7 @@ class _GroceryListState extends State<GroceryList> {
     ];
 
     items = <GroceryItem>[
-      GroceryItem(1, 'white bread', 'pastry', null, false, null, null, "bob",
+      GroceryItem(1, 'white bread', 'pastry', null, true, null, null, "bob",
           DateTime.now()),
       GroceryItem(2, 'flavor bread', 'pastry', null, false, true, true, "alice",
           DateTime.now()),
@@ -104,118 +104,243 @@ class _GroceryListState extends State<GroceryList> {
                 child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
               child: ListView.builder(
-                  itemCount: categories.length,
+                  itemCount: categories.length + 1, // 1 is for collected
                   itemBuilder: (BuildContext context, int index) {
-                    final categoryItems = items
-                        .where(
-                          (element) => element.category == categories[index],
-                        )
-                        .toList(growable: false);
-                    return Column(
-                      children: [
-                        Text(categories[index]),
-                        const Divider(),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          // Providing a restorationId allows the ListView to restore the
-                          // scroll position when a user leaves and returns to the app after it
-                          // has been killed while running in the background.
-                          restorationId: 'sampleItemListView',
-                          itemCount: categoryItems.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final item = categoryItems[index];
+                    if (index < categories.length) {
+                      // if a normal category
+                      final categoryItems = items
+                          .where(
+                            (element) =>
+                                (element.category == categories[index] &&
+                                    !element.collected),
+                          )
+                          .toList(growable: false);
+                      return Column(
+                        children: [
+                          Text(categories[index]),
+                          const Divider(),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const ClampingScrollPhysics(),
+                            // Providing a restorationId allows the ListView to restore the
+                            // scroll position when a user leaves and returns to the app after it
+                            // has been killed while running in the background.
+                            restorationId: 'sampleItemListView',
+                            itemCount: categoryItems.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final item = categoryItems[index];
 
-                            return Dismissible(
-                              key: Key(item.id.toString()),
-                              background: Container(
-                                color: Colors.green,
-                                child: const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(
-                                      Icons.front_hand_rounded,
-                                    ),
-                                    Icon(
-                                      Icons.check,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              child: ListTile(
-                                  title: Text(item.name),
-                                  subtitle: item.comments != null
-                                      ? Text(item.comments!)
-                                      : null,
-                                  leading: const CircleAvatar(
-                                    // Display the Flutter Logo image asset.
-                                    foregroundImage: AssetImage(
-                                        'assets/images/flutter_logo.png'),
+                              return Dismissible(
+                                key: Key(item.id.toString()),
+                                background: Container(
+                                  color: Colors.green,
+                                  child: const Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(
+                                        Icons.front_hand_rounded,
+                                      ),
+                                      Icon(
+                                        Icons.check,
+                                      ),
+                                    ],
                                   ),
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AboutDialog(
-                                          applicationName: "View Item",
-                                          children: [
-                                            Column(children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text("Name"),
-                                                  Text(item.name),
-                                                ],
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const Text("Category"),
-                                                  Text(item.category),
-                                                ],
-                                              ),
-                                              const Divider(),
-                                              const Text("Comments"),
-                                              Text(item.comments ?? ""),
-                                              const Divider(),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(item.addedBy),
-                                                  Text(DateFormat(
-                                                          "MM-dd-yy kk:mm")
-                                                      .format(
-                                                          item.lastUpdated)),
-                                                ],
-                                              ),
-                                            ])
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }),
-                              onDismissed: (direction) {
-                                final success = items.remove(item);
-                                if (!success) {
-                                  // only show snackbar for error
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(
-                                              'error: $success: ${item.id} dismissed $direction')));
-                                }
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    );
+                                ),
+                                child: ListTile(
+                                    title: Text(item.name),
+                                    subtitle: item.comments != null
+                                        ? Text(item.comments!)
+                                        : null,
+                                    leading: const CircleAvatar(
+                                      // Display the Flutter Logo image asset.
+                                      foregroundImage: AssetImage(
+                                          'assets/images/flutter_logo.png'),
+                                    ),
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AboutDialog(
+                                            applicationName: "View Item",
+                                            children: [
+                                              Column(children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    const Text("Name"),
+                                                    Text(item.name),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    const Text("Category"),
+                                                    Text(item.category),
+                                                  ],
+                                                ),
+                                                const Divider(),
+                                                const Text("Comments"),
+                                                Text(item.comments ?? ""),
+                                                const Divider(),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(item.addedBy),
+                                                    Text(DateFormat(
+                                                            "MM-dd-yy kk:mm")
+                                                        .format(
+                                                            item.lastUpdated)),
+                                                  ],
+                                                ),
+                                              ])
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }),
+                                onDismissed: (direction) {
+                                  final success = items.remove(item);
+                                  if (!success) {
+                                    // only show snackbar for error
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'error: $success: ${item.id} dismissed $direction')));
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    } else {
+                      final collectedItems = items
+                          .where(
+                            (element) => element.collected,
+                          )
+                          .toList(growable: false);
+                      return Column(
+                        children: [
+                          const Text("collected"),
+                          const Divider(),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const ClampingScrollPhysics(),
+                            // Providing a restorationId allows the ListView to restore the
+                            // scroll position when a user leaves and returns to the app after it
+                            // has been killed while running in the background.
+                            restorationId: 'sampleItemListView',
+                            itemCount: collectedItems.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final item = collectedItems[index];
+
+                              return Dismissible(
+                                key: Key(item.id.toString()),
+                                background: Container(
+                                  color: Colors.yellow,
+                                  child: const Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Icon(
+                                        Icons.front_hand_rounded,
+                                      ),
+                                      Icon(
+                                        Icons.cancel,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                child: ListTile(
+                                    title: RichText(
+                                      text: TextSpan(
+                                        text: item.name,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                      ),
+                                    ),
+                                    subtitle: item.comments != null
+                                        ? Text(item.comments!)
+                                        : null,
+                                    leading: const CircleAvatar(
+                                      // Display the Flutter Logo image asset.
+                                      foregroundImage: AssetImage(
+                                          'assets/images/flutter_logo.png'),
+                                    ),
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AboutDialog(
+                                            applicationName: "View Item",
+                                            children: [
+                                              Column(children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    const Text("Name"),
+                                                    Text(item.name),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    const Text("Category"),
+                                                    Text(item.category),
+                                                  ],
+                                                ),
+                                                const Divider(),
+                                                const Text("Comments"),
+                                                Text(item.comments ?? ""),
+                                                const Divider(),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(item.addedBy),
+                                                    Text(DateFormat(
+                                                            "MM-dd-yy kk:mm")
+                                                        .format(
+                                                            item.lastUpdated)),
+                                                  ],
+                                                ),
+                                              ])
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }),
+                                onDismissed: (direction) {
+                                  final success = items.remove(item);
+                                  if (!success) {
+                                    // only show snackbar for error
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                'error: $success: ${item.id} dismissed $direction')));
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      );
+                    }
                   }),
             )),
           ],

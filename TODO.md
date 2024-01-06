@@ -1,11 +1,17 @@
 - [ ] frontend
   - [ ] edit modal
+  - [ ] add item
+    - [ ] comments
+    - [ ] importance
+    - [ ] match
   - [ ] login
     - [ ] stay on list page
     - [ ] if fail go to login
   - [ ] hamburger
   - [ ] current item modal
   - [ ] list
+    - [ ] importance
+    - [ ] match
     - [ ] categories
     - [ ] "quick select" categories
       - [ ] find out jumping
@@ -17,6 +23,7 @@
       - [ ] but where would the button go. doesnt need common use
     - [ ] collected
       - [ ] have it as gray in the category
+      - [ ] remove collected
   - [ ] settings
     - [ ] add button placement
     - [ ] precompile after
