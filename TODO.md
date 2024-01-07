@@ -1,5 +1,6 @@
 - [ ] frontend
   - [ ] edit modal
+  - [ ] personal list
   - [ ] add item
     - [ ] comments
     - [ ] importance

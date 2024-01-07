@@ -107,3 +107,7 @@ the list might need to grow. if i keep it
 
 i think this is the best way to handle it. what if thy have the name, or kepp it indepent
 cant have to list views
+
+doesnt have function like go %+v, but can get close i guess.
+this is good enough
+cant get the objects

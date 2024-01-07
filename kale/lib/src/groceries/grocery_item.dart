@@ -28,4 +28,11 @@ class GroceryItem {
 
   final String addedBy;
   final DateTime lastUpdated;
+
+  @override
+  String toString() {
+    return 'id: "$id"; name: "$name"; category: "$category"; comments: "$comments"; collected: "$collected"; '
+        'importance: "$importance"; match: "$match"; '
+        'addedBy: "$addedBy"; lastUpdated: "$lastUpdated"';
+  }
 }

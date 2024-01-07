@@ -1,8 +1,10 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:kale/src/groceries/null_switch.dart';
 import '../settings/settings_controller.dart';
 
 import '../settings/settings_view.dart';
@@ -35,8 +37,11 @@ class _GroceryListState extends State<GroceryList> {
   late double maxWidth;
   late double position;
 
+  // TODO make these just one object
   late TextEditingController itemName;
   late TextEditingController itemCategory;
+  late bool? itemImportance;
+  late bool? itemMatch;
 
   @override
   void initState() {
@@ -69,6 +74,8 @@ class _GroceryListState extends State<GroceryList> {
 
     focusAddItem = FocusNode();
     itemName = TextEditingController();
+    itemImportance = null;
+    itemMatch = null;
   }
 
   @override
@@ -157,53 +164,26 @@ class _GroceryListState extends State<GroceryList> {
                                       foregroundImage: AssetImage(
                                           'assets/images/flutter_logo.png'),
                                     ),
+                                    trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (item.match == true)
+                                            const Icon(Icons.crisis_alert)
+                                          else
+                                            const Icon(
+                                              Icons.lens_blur,
+                                            ),
+                                          if (item.importance == true)
+                                            const Icon(
+                                              Icons.priority_high,
+                                              color: Colors.green,
+                                            )
+                                          else
+                                            const Icon(Icons.question_mark,
+                                                color: Colors.green),
+                                        ]),
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AboutDialog(
-                                            applicationName: "View Item",
-                                            children: [
-                                              Column(children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Text("Name"),
-                                                    Text(item.name),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Text("Category"),
-                                                    Text(item.category),
-                                                  ],
-                                                ),
-                                                const Divider(),
-                                                const Text("Comments"),
-                                                Text(item.comments ?? ""),
-                                                const Divider(),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(item.addedBy),
-                                                    Text(DateFormat(
-                                                            "MM-dd-yy kk:mm")
-                                                        .format(
-                                                            item.lastUpdated)),
-                                                  ],
-                                                ),
-                                              ])
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      showItemModal(context, item);
                                     }),
                                 onDismissed: (direction) {
                                   final success = items.remove(item);
@@ -278,52 +258,7 @@ class _GroceryListState extends State<GroceryList> {
                                           'assets/images/flutter_logo.png'),
                                     ),
                                     onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AboutDialog(
-                                            applicationName: "View Item",
-                                            children: [
-                                              Column(children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Text("Name"),
-                                                    Text(item.name),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    const Text("Category"),
-                                                    Text(item.category),
-                                                  ],
-                                                ),
-                                                const Divider(),
-                                                const Text("Comments"),
-                                                Text(item.comments ?? ""),
-                                                const Divider(),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(item.addedBy),
-                                                    Text(DateFormat(
-                                                            "MM-dd-yy kk:mm")
-                                                        .format(
-                                                            item.lastUpdated)),
-                                                  ],
-                                                ),
-                                              ])
-                                            ],
-                                          );
-                                        },
-                                      );
+                                      showItemModal(context, item);
                                     }),
                                 onDismissed: (direction) {
                                   final success = items.remove(item);
@@ -447,53 +382,145 @@ class _GroceryListState extends State<GroceryList> {
                             },
                           ),
                         ),
+                        NullSwitch(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.horizontal(
+                                left: Radius.circular(25.0)),
+                          ))),
+                          iconBuilder: (context, state) {
+                            if (state == null) {
+                              return const Icon(
+                                Icons.priority_high_outlined,
+                                color: Colors.grey,
+                              );
+                            }
+
+                            return state
+                                ? const Icon(Icons.priority_high)
+                                : const Icon(Icons.question_mark);
+                          },
+                          onSwtich: (state) {
+                            itemImportance = state;
+                          },
+                        ),
+                        NullSwitch(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.horizontal(
+                                right: Radius.circular(25.0)),
+                          ))),
+                          iconBuilder: (context, state) {
+                            if (state == null) {
+                              return const Icon(
+                                Icons.crisis_alert,
+                                color: Colors.grey,
+                              );
+                            }
+
+                            return state
+                                ? const Icon(Icons.crisis_alert)
+                                : const Icon(Icons.lens_blur);
+                          },
+                          onSwtich: (state) {
+                            itemMatch = state;
+                          },
+                        ),
                         ElevatedButton(
                             style: ButtonStyle(
                                 shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                     const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ))),
-                            onPressed: () {
-                              print('comment');
-                            },
-                            child: const Text('Comments')),
-                        ElevatedButton(
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                    const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.horizontal(
-                                  right: Radius.circular(25.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25.0)),
                             ))),
                             onPressed: () {
                               final name = itemName.text;
                               final category = itemCategory.text;
                               final comments = '';
-                              print('add "$name" "$category" "$comments"');
-                              items.add(GroceryItem(
+                              print(
+                                  'add "$name" "$category" "$comments" "$itemImportance" "$itemMatch"');
+
+                              final item = GroceryItem(
                                   -1,
                                   name,
                                   category,
                                   comments,
                                   false,
-                                  null,
-                                  null,
+                                  itemImportance,
+                                  itemMatch,
                                   "bob",
-                                  DateTime.now()));
+                                  DateTime.now());
+                              print(item);
+                              items.add(item);
 
                               itemName.text = '';
                               itemCategory.text = '';
                             },
-                            child: const Text('+')),
+                            child: const Icon(Icons.add)),
                       ],
-                    )
+                    ),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ))),
+                      onPressed: () {
+                        print('comment');
+                      },
+                      child: const Text('Comments')),
                 ],
               ),
             ),
           ),
         ),
       ]),
+    );
+  }
+
+  Future<dynamic> showItemModal(BuildContext context, GroceryItem item) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AboutDialog(
+          applicationName: "View Item",
+          children: [
+            Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Name"),
+                  Text(item.name),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text("Category"),
+                  Text(item.category),
+                ],
+              ),
+              const Divider(),
+              const Text("Comments"),
+              Text(item.comments ?? ""),
+              const Divider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(item.addedBy),
+                  Text(DateFormat("MM-dd-yy kk:mm").format(item.lastUpdated)),
+                ],
+              ),
+            ])
+          ],
+        );
+      },
     );
   }
 
