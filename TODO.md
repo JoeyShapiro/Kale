@@ -2,14 +2,18 @@
   - [ ] edit modal
   - [ ] personal list
   - [ ] add item
-    - [ ] comments
-    - [ ] importance
-    - [ ] match
+    - [x] comments
+    - [x] importance
+    - [x] match
+    - [ ] change color of add if acceptable input
+    - [ ] change color of some background if add fails
   - [ ] login
     - [ ] stay on list page
     - [ ] if fail go to login
   - [ ] hamburger
   - [ ] current item modal
+  - [ ] personal list
+    - [ ] its own table or CI/CD in the same family table
   - [ ] list
     - [ ] importance
     - [ ] match

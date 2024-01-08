@@ -111,3 +111,15 @@ cant have to list views
 doesnt have function like go %+v, but can get close i guess.
 this is good enough
 cant get the objects
+
+should personal list be its own table, or in the family list with a different id
+should it be its own table with a standard list, since only one person is using it. or source controlled
+
+could make a popup. but that is too many popups
+could have a advanced field, but that seems still odd,
+button to bring it up is too many things to do, and too many states to watch
+this way works, i guess. and it can expanad which is nice
+would like to completely hide it, but this is fine
+
+also using more popups or advanced would be hard to keep track of values
+with show advanced, it would be the same height, then bigger

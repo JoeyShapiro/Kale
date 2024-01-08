@@ -42,6 +42,7 @@ class _GroceryListState extends State<GroceryList> {
   late TextEditingController itemCategory;
   late bool? itemImportance;
   late bool? itemMatch;
+  late TextEditingController itemComments;
 
   @override
   void initState() {
@@ -76,6 +77,7 @@ class _GroceryListState extends State<GroceryList> {
     itemName = TextEditingController();
     itemImportance = null;
     itemMatch = null;
+    itemComments = TextEditingController();
   }
 
   @override
@@ -329,7 +331,22 @@ class _GroceryListState extends State<GroceryList> {
                       hintText: 'New Item...',
                     ),
                   ),
-                  if (showButtons)
+                  if (showButtons) ...[
+                    TextField(
+                      controller: itemComments,
+                      decoration: const InputDecoration(
+                        labelText: 'Comments',
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            borderSide: BorderSide(color: Colors.greenAccent)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(100)),
+                            borderSide: BorderSide(color: Colors.greenAccent)),
+                      ),
+                      maxLines: null,
+                    ),
                     Row(
                       children: [
                         Flexible(
@@ -441,7 +458,7 @@ class _GroceryListState extends State<GroceryList> {
                             onPressed: () {
                               final name = itemName.text;
                               final category = itemCategory.text;
-                              final comments = '';
+                              final comments = itemComments.text;
                               print(
                                   'add "$name" "$category" "$comments" "$itemImportance" "$itemMatch"');
 
@@ -460,21 +477,12 @@ class _GroceryListState extends State<GroceryList> {
 
                               itemName.text = '';
                               itemCategory.text = '';
+                              itemComments.text = '';
                             },
                             child: const Icon(Icons.add)),
                       ],
                     ),
-                  ElevatedButton(
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ))),
-                      onPressed: () {
-                        print('comment');
-                      },
-                      child: const Text('Comments')),
+                  ]
                 ],
               ),
             ),
