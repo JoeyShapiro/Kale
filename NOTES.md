@@ -123,3 +123,10 @@ would like to completely hide it, but this is fine
 
 also using more popups or advanced would be hard to keep track of values
 with show advanced, it would be the same height, then bigger
+
+it can handle objects, but i dont need taht
+
+this way only works with small lists. i could do something different, but i feel it might render poorly
+i will just do the more work
+https://stackoverflow.com/questions/49153087/flutter-scrolling-to-a-widget-in-listview
+should maybe add it to the list. seems more usable

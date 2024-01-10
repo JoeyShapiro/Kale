@@ -36,6 +36,10 @@
   - [ ] delete option
     - [ ] use toast with undo
     - [ ] flip add button
+- [ ] middle
+  - [ ] api has class
+    - [ ] template style
+    - [ ] can return error and change type
 - [ ] backend
   - [ ] session
   - [ ] actions

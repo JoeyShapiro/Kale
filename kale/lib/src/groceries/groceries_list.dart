@@ -43,6 +43,7 @@ class _GroceryListState extends State<GroceryList> {
   late bool? itemImportance;
   late bool? itemMatch;
   late TextEditingController itemComments;
+  late ScrollController scrollController;
 
   @override
   void initState() {
@@ -70,7 +71,33 @@ class _GroceryListState extends State<GroceryList> {
       GroceryItem(3, 'cookies', 'deli', 'always could use cookies', false, null,
           null, "zelda", DateTime.now()),
       GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
-          false, null, "bob", DateTime.now())
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
+      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+          false, null, "bob", DateTime.now()),
     ];
 
     focusAddItem = FocusNode();
@@ -78,6 +105,8 @@ class _GroceryListState extends State<GroceryList> {
     itemImportance = null;
     itemMatch = null;
     itemComments = TextEditingController();
+
+    scrollController = ScrollController();
   }
 
   @override
@@ -113,6 +142,7 @@ class _GroceryListState extends State<GroceryList> {
                 child: ImageFiltered(
               imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
               child: ListView.builder(
+                  controller: scrollController,
                   itemCount: categories.length + 1, // 1 is for collected
                   itemBuilder: (BuildContext context, int index) {
                     if (index < categories.length) {
@@ -125,6 +155,7 @@ class _GroceryListState extends State<GroceryList> {
                           )
                           .toList(growable: false);
                       return Column(
+                        key: GlobalObjectKey(categories[index]),
                         children: [
                           Text(categories[index]),
                           const Divider(),
@@ -209,6 +240,7 @@ class _GroceryListState extends State<GroceryList> {
                           )
                           .toList(growable: false);
                       return Column(
+                        key: const GlobalObjectKey("collected"),
                         children: [
                           const Text("collected"),
                           const Divider(),
@@ -280,6 +312,47 @@ class _GroceryListState extends State<GroceryList> {
                     }
                   }),
             )),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: PopupMenuButton<String>(
+                  icon: const Icon(Icons.list),
+                  initialValue: null,
+                  // Callback that sets the selected popup menu item.
+                  onSelected: (String item) async {
+                    var currentOffset = 0.0;
+                    // first have it load in
+                    // TODO try to just keep running, then stop halfway through
+                    while (GlobalObjectKey(item).currentContext == null) {
+                      // its not quicker if you go further, but good enough
+                      await scrollController.position.animateTo(
+                        // TODO i cant tell if this works or not
+                        currentOffset += 100,
+                        duration: const Duration(milliseconds: 700),
+                        curve: Curves.linear,
+                      );
+                      print(currentOffset);
+                      print(GlobalObjectKey(item).currentContext == null);
+                    }
+
+                    // then finish the job
+                    Scrollable.ensureVisible(
+                        GlobalObjectKey(item).currentContext!,
+                        duration: const Duration(seconds: 1),
+                        alignment: 0,
+                        curve: Curves.decelerate);
+                  },
+                  itemBuilder: (BuildContext context) =>
+                      categories.map((entry) {
+                    return PopupMenuItem<String>(
+                      value: entry,
+                      child: Text(entry),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
           ],
         ),
         TransformingButton(
