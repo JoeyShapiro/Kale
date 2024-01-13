@@ -1,5 +1,6 @@
 - [ ] frontend
-  - [ ] edit modal
+  - [ ] edit modal\
+    - [x] edit importance
   - [ ] personal list
   - [ ] add item
     - [x] comments
@@ -15,17 +16,19 @@
   - [ ] personal list
     - [ ] its own table or CI/CD in the same family table
   - [ ] list
-    - [ ] importance
-    - [ ] match
-    - [ ] categories
-    - [ ] "quick select" categories
-      - [ ] find out jumping
+    - [ ] hold for importance context (reactions)
+    - [x] importance
+    - [x] match
+    - [x] categories
+    - [x] "quick select" categories
+      - [ ] add collected
+      - [x] find out jumping
       - [ ] like the alphabet thing in ios
-      - [ ] could use the hamburger thing
-      - [ ] could make my own thing
-        - [ ] show all categories in a section thing
-      - [ ] but do this part later
-      - [ ] but where would the button go. doesnt need common use
+      - [x] could use the hamburger thing
+      - [x] could make my own thing
+        - [x] show all categories in a section thing
+      - [x] but do this part later
+      - [x] but where would the button go. doesnt need common use
     - [ ] collected
       - [ ] have it as gray in the category
       - [ ] remove collected

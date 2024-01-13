@@ -4,9 +4,14 @@ class NullSwitch extends StatefulWidget {
   final Widget? Function(BuildContext context, bool? state) iconBuilder;
   final Function(bool? state)? onSwtich;
   final ButtonStyle? style;
+  final bool? start;
 
   const NullSwitch(
-      {super.key, required this.iconBuilder, this.onSwtich, this.style});
+      {super.key,
+      required this.iconBuilder,
+      this.onSwtich,
+      this.style,
+      this.start});
 
   @override
   State<NullSwitch> createState() => _NullSwitchState();
@@ -14,6 +19,12 @@ class NullSwitch extends StatefulWidget {
 
 class _NullSwitchState extends State<NullSwitch> {
   bool? state;
+
+  @override
+  void initState() {
+    super.initState();
+    state = widget.start;
+  }
 
   @override
   Widget build(BuildContext context) {

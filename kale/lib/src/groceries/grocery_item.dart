@@ -1,15 +1,7 @@
 /// A placeholder class that represents an entity or model.
 class GroceryItem {
-  const GroceryItem(
-      this.id,
-      this.name,
-      this.category,
-      this.comments,
-      this.collected,
-      this.importance,
-      this.match,
-      this.addedBy,
-      this.lastUpdated);
+  GroceryItem(this.id, this.name, this.category, this.comments, this.collected,
+      this.importance, this.match, this.addedBy, this.lastUpdated);
 
   final int id;
   final String name;
@@ -23,8 +15,8 @@ class GroceryItem {
     false = not important
     null = normal
   */
-  final bool? importance;
-  final bool? match;
+  bool? importance;
+  bool? match;
 
   final String addedBy;
   final DateTime lastUpdated;

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -188,36 +189,40 @@ class _GroceryListState extends State<GroceryList> {
                                   ),
                                 ),
                                 child: ListTile(
-                                    title: Text(item.name),
-                                    subtitle: item.comments != null
-                                        ? Text(item.comments!)
-                                        : null,
-                                    leading: const CircleAvatar(
-                                      // Display the Flutter Logo image asset.
-                                      foregroundImage: AssetImage(
-                                          'assets/images/flutter_logo.png'),
-                                    ),
-                                    trailing: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          if (item.match == true)
-                                            const Icon(Icons.crisis_alert)
-                                          else
-                                            const Icon(
-                                              Icons.lens_blur,
-                                            ),
-                                          if (item.importance == true)
-                                            const Icon(
-                                              Icons.priority_high,
-                                              color: Colors.green,
-                                            )
-                                          else
-                                            const Icon(Icons.question_mark,
-                                                color: Colors.green),
-                                        ]),
-                                    onTap: () {
-                                      showItemModal(context, item);
-                                    }),
+                                  title: Text(item.name),
+                                  subtitle: item.comments != null
+                                      ? Text(item.comments!)
+                                      : null,
+                                  leading: const CircleAvatar(
+                                    // Display the Flutter Logo image asset.
+                                    foregroundImage: AssetImage(
+                                        'assets/images/flutter_logo.png'),
+                                  ),
+                                  trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (item.match == true)
+                                          const Icon(Icons.crisis_alert)
+                                        else if (item.match == false)
+                                          const Icon(
+                                            Icons.lens_blur,
+                                          ),
+                                        if (item.importance == true)
+                                          const Icon(
+                                            Icons.priority_high,
+                                            color: Colors.green,
+                                          )
+                                        else if (item.importance == false)
+                                          const Icon(Icons.question_mark,
+                                              color: Colors.green),
+                                      ]),
+                                  onTap: () {
+                                    showItemModal(context, item);
+                                  },
+                                  onLongPress: () {
+                                    print('long press');
+                                  },
+                                ),
                                 onDismissed: (direction) {
                                   final success = items.remove(item);
                                   if (!success) {
@@ -291,6 +296,9 @@ class _GroceryListState extends State<GroceryList> {
                                       foregroundImage: AssetImage(
                                           'assets/images/flutter_logo.png'),
                                     ),
+                                    onLongPress: () {
+                                      print(item.name);
+                                    },
                                     onTap: () {
                                       showItemModal(context, item);
                                     }),
@@ -569,10 +577,22 @@ class _GroceryListState extends State<GroceryList> {
     return showDialog(
       context: context,
       builder: (context) {
-        return AboutDialog(
-          applicationName: "View Item",
-          children: [
-            Column(children: [
+        return AlertDialog(
+            title: const Text("View Item"),
+            actions: [
+              TextButton(onPressed: () {}, child: const Text("cancel")),
+              TextButton(
+                  onPressed: () {
+                    for (var i = 0; i < items.length; i++) {
+                      if (items[i].id == item.id) {
+                        items[i] = item;
+                        break;
+                      }
+                    }
+                  },
+                  child: const Text("save"))
+            ],
+            content: Column(children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -592,15 +612,68 @@ class _GroceryListState extends State<GroceryList> {
               Text(item.comments ?? ""),
               const Divider(),
               Row(
+                children: [
+                  NullSwitch(
+                    start: item.importance,
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.horizontal(left: Radius.circular(25.0)),
+                    ))),
+                    iconBuilder: (context, state) {
+                      if (state == null) {
+                        return const Icon(
+                          Icons.priority_high_outlined,
+                          color: Colors.grey,
+                        );
+                      }
+
+                      return state
+                          ? const Icon(Icons.priority_high)
+                          : const Icon(Icons.question_mark);
+                    },
+                    onSwtich: (state) {
+                      item.importance = state;
+                    },
+                  ),
+                  NullSwitch(
+                    start: item.match,
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.horizontal(right: Radius.circular(25.0)),
+                    ))),
+                    iconBuilder: (context, state) {
+                      if (state == null) {
+                        return const Icon(
+                          Icons.crisis_alert,
+                          color: Colors.grey,
+                        );
+                      }
+
+                      return state
+                          ? const Icon(Icons.crisis_alert)
+                          : const Icon(Icons.lens_blur);
+                    },
+                    onSwtich: (state) {
+                      item.match = state;
+                    },
+                  ),
+                ],
+              ),
+              const Divider(),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(item.addedBy),
                   Text(DateFormat("MM-dd-yy kk:mm").format(item.lastUpdated)),
                 ],
               ),
-            ])
-          ],
-        );
+            ]));
       },
     );
   }

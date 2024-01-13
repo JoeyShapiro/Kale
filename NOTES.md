@@ -130,3 +130,43 @@ this way only works with small lists. i could do something different, but i feel
 i will just do the more work
 https://stackoverflow.com/questions/49153087/flutter-scrolling-to-a-widget-in-listview
 should maybe add it to the list. seems more usable
+
+i need to remove these double lists. it gets super in the way
+just want one list somehows
+
+if they have too many items, load only a few. if they jump to a section, load that part
+this is cool, but would not work. it is possible, but a lot of work
+it would also only be useful when they have a lot of change and a lot of stuff
+better to just bite the bullet
+
+send precompile if over a threshhold
+send precompile if change is larger than precompile. this would mean i would need to precomiple
+i think i would always need to precompile
+then i would only send that
+or only send precompiled change
+then tell them to just add that
+look into this all later, but would need to precompile all of it regardless. that is a lot of work
+could not descriminate
+but save all data on device, and save the date of last rx. this is good idea so far
+no, sending precompiled change wouldnt work, what about del and collect. it would only work with add
+or it would be just a preprecompile. or precompile to compile
+that would be getting to deep and compliacted. look into if i need it. need to learn
+would be useful for bad actors, but i can just watch for them
+oh, but i need to learn precompile regardless, and the server will have to do it at some point
+i can use this as an opportunintyu to test it and see if i want it to precdompile everytime
+but i need to learn how it will work, and python is a good start.
+
+https://api.flutter.dev/flutter/widgets/ContextMenuController-class.html
+this is a nice idea for the reactions, but wont really work
+the menu cannot get the current item, unless each item has its own complex menu
+also, it cant do a row. it uses context menu, which is column
+
+dont save actions, but save final list. how would i do this then
+i can just make it not final, and make changes, but i should have a fun way to make chagnes
+if they are not final, then when i change something, say the name, i would need to recreate the object, and readd it to the list
+is that worth it. yeah that could cause issues, may not be worth the effort.
+yeah because it wouldnt be the same, because of the list, i need to make it the same
+
+i would have to update by calls and not objects, because they cant be modified. so i can touch it later
+i could delete the objects and place the new one, but that seems like a lot of work. yeah
+better to modify what is there where they match uuid
