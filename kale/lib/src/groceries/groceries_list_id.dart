@@ -4,6 +4,7 @@ import 'package:kale/src/groceries/grocery_item.dart';
 class GroceriesListService {
   Future<ThemeMode> themeMode() async => ThemeMode.system;
   Future<bool> fancyAnims() async => true;
+  Future<List<GroceryItem>> items() async => List.empty(growable: true);
 
   /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {

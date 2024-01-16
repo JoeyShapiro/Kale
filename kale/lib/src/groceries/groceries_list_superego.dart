@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:kale/src/groceries/groceries_list_service.dart';
+import 'package:kale/src/groceries/groceries_list_id.dart';
 import 'package:kale/src/groceries/null_switch.dart';
 import '../settings/settings_controller.dart';
 
 import '../settings/settings_view.dart';
 import 'grocery_item.dart';
 import 'transforming_button.dart';
-import 'groceries_list_controller.dart';
+import 'groceries_list_ego.dart';
 
 class GroceryList extends StatefulWidget {
   final SettingsController settings;
@@ -590,6 +590,7 @@ class _GroceryListState extends State<GroceryList> {
                   onPressed: () {
                     // TODO this is cool, but isnt totally right. i think
                     groceriesListController.updateItem(item);
+                    // TODO see if the whole thing works, try to use MVC or setomthing
 
                     // this works fine actually
                     setState(() {

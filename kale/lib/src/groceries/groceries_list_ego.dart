@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kale/src/groceries/grocery_item.dart';
 
-import 'groceries_list_service.dart';
+import 'groceries_list_id.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
 /// user settings, or listen to user settings changes.
@@ -30,6 +30,7 @@ class GroceriesListController with ChangeNotifier {
   Future<void> loadSettings() async {
     _themeMode = await _groceriesListService.themeMode();
     _fancyAnims = await _groceriesListService.fancyAnims();
+    _items = await _groceriesListService.items();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -66,6 +67,13 @@ class GroceriesListController with ChangeNotifier {
   }
 
   Future<void> updateItem(GroceryItem item) async {
+    for (var i = 0; i < _items.length; i++) {
+      if (item.id == _items[i].id) {
+        _items[i] = item;
+        break;
+      }
+    }
+
     notifyListeners();
 
     await _groceriesListService.updateItem(item);
