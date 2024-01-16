@@ -170,3 +170,6 @@ yeah because it wouldnt be the same, because of the list, i need to make it the 
 i would have to update by calls and not objects, because they cant be modified. so i can touch it later
 i could delete the objects and place the new one, but that seems like a lot of work. yeah
 better to modify what is there where they match uuid
+
+keys are wierdc, but allow for unique use
+would it break with a normal key /shrug

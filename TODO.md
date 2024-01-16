@@ -1,5 +1,11 @@
 - [ ] frontend
-  - [ ] edit modal\
+  - [ ] MVC
+    - [ ] store *ITEMS* in controller
+    - [x] try set state
+    - [ ] try with null switch
+    - [ ] if items go in controller, what is in service
+      - [ ] maybe just interface
+  - [ ] edit modal
     - [x] edit importance
   - [ ] personal list
   - [ ] add item

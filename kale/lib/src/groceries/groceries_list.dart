@@ -5,12 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:kale/src/groceries/groceries_list_service.dart';
 import 'package:kale/src/groceries/null_switch.dart';
 import '../settings/settings_controller.dart';
 
 import '../settings/settings_view.dart';
 import 'grocery_item.dart';
 import 'transforming_button.dart';
+import 'groceries_list_controller.dart';
 
 class GroceryList extends StatefulWidget {
   final SettingsController settings;
@@ -45,10 +47,13 @@ class _GroceryListState extends State<GroceryList> {
   late bool? itemMatch;
   late TextEditingController itemComments;
   late ScrollController scrollController;
+  late GroceriesListController
+      groceriesListController; // TODO settings is decalred in main. i dont think i need this
 
   @override
   void initState() {
     super.initState();
+    groceriesListController = GroceriesListController(GroceriesListService());
 
     // final maxWdith = MediaQuery.of(context).size.width;
     FlutterView view = WidgetsBinding.instance.platformDispatcher.views.first;
@@ -73,31 +78,31 @@ class _GroceryListState extends State<GroceryList> {
           null, "zelda", DateTime.now()),
       GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(5, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(6, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(7, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(8, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(9, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(10, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(11, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(12, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(13, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(14, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(15, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(16, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
-      GroceryItem(4, 'frozen dinner', 'frozen', 'something different', false,
+      GroceryItem(17, 'frozen dinner', 'frozen', 'something different', false,
           false, null, "bob", DateTime.now()),
     ];
 
@@ -172,7 +177,7 @@ class _GroceryListState extends State<GroceryList> {
                               final item = categoryItems[index];
 
                               return Dismissible(
-                                key: Key(item.id.toString()),
+                                key: GlobalObjectKey(item.id.toString()),
                                 background: Container(
                                   color: Colors.green,
                                   child: const Row(
@@ -261,7 +266,7 @@ class _GroceryListState extends State<GroceryList> {
                               final item = collectedItems[index];
 
                               return Dismissible(
-                                key: Key(item.id.toString()),
+                                key: GlobalObjectKey(item.id.toString()),
                                 background: Container(
                                   color: Colors.yellow,
                                   child: const Row(
@@ -583,12 +588,18 @@ class _GroceryListState extends State<GroceryList> {
               TextButton(onPressed: () {}, child: const Text("cancel")),
               TextButton(
                   onPressed: () {
-                    for (var i = 0; i < items.length; i++) {
-                      if (items[i].id == item.id) {
-                        items[i] = item;
-                        break;
+                    // TODO this is cool, but isnt totally right. i think
+                    groceriesListController.updateItem(item);
+
+                    // this works fine actually
+                    setState(() {
+                      for (var i = 0; i < items.length; i++) {
+                        if (items[i].id == item.id) {
+                          items[i] == item;
+                          break;
+                        }
                       }
-                    }
+                    });
                   },
                   child: const Text("save"))
             ],
