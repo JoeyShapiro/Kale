@@ -173,3 +173,9 @@ better to modify what is there where they match uuid
 
 keys are wierdc, but allow for unique use
 would it break with a normal key /shrug
+
+is the controller and model not supposed to return anything, just update what it has
+will thats annoying. i dont like that. too confusing
+
+it needs to be this way. i mean, i dont have to, but it will crash on first time. that looks bad
+also i cant wait

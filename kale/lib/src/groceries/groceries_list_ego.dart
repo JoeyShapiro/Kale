@@ -18,11 +18,12 @@ class GroceriesListController with ChangeNotifier {
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
   late bool _fancyAnims;
-  late List<GroceryItem> _items;
+  List<GroceryItem>? _items;
 
   // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
   bool get fancyAnims => _fancyAnims;
+  List<GroceryItem> get items => _items ?? List.empty();
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
@@ -67,9 +68,9 @@ class GroceriesListController with ChangeNotifier {
   }
 
   Future<void> updateItem(GroceryItem item) async {
-    for (var i = 0; i < _items.length; i++) {
-      if (item.id == _items[i].id) {
-        _items[i] = item;
+    for (var i = 0; i < _items!.length; i++) {
+      if (item.id == _items![i].id) {
+        _items![i] = item;
         break;
       }
     }
