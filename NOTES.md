@@ -179,3 +179,12 @@ will thats annoying. i dont like that. too confusing
 
 it needs to be this way. i mean, i dont have to, but it will crash on first time. that looks bad
 also i cant wait
+
+who should handle actions -> items. the model or the controller
+hmmmm
+the model would send the items, then the controller would have to readd everything
+so, it makes sense for model to handle and send actions to the controller;
+the controller handles items, and the view simply views them.
+the view should not handle convertint actions to items
+wait what does the model do, does it only send data
+gpt claims the model handles it, but how. i kinda like my idea

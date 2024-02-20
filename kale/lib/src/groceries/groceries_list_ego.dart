@@ -67,6 +67,10 @@ class GroceriesListController with ChangeNotifier {
     await _groceriesListService.updateFancyAnims(newOption);
   }
 
+  Future<Error?> getActions(DateTime since) async {
+    return null;
+  }
+
   Future<void> updateItem(GroceryItem item) async {
     for (var i = 0; i < _items!.length; i++) {
       if (item.id == _items![i].id) {

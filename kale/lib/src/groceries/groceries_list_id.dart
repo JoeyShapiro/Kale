@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kale/src/groceries/grocery_item.dart';
+import 'package:kale/src/groceries/result.dart';
 
 class GroceriesListService {
   Future<ThemeMode> themeMode() async => ThemeMode.system;
@@ -55,6 +56,10 @@ class GroceriesListService {
   Future<void> updateFancyAnims(bool option) async {
     // Use the shared_preferences package to persist settings locally or the
     // http package to persist settings over the network.
+  }
+
+  Future<Result> getActions(DateTime since) async {
+    return Result();
   }
 
   Future<void> updateItem(GroceryItem item) async {
