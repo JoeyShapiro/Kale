@@ -67,7 +67,25 @@ class GroceriesListController with ChangeNotifier {
     await _groceriesListService.updateFancyAnims(newOption);
   }
 
-  Future<Error?> getActions(DateTime since) async {
+  // i might have planned for this to be done on view, but i dont like that
+  // but just using this is redundant
+  Error? getActions(DateTime since) {
+    var result = _groceriesListService.getActions(since);
+
+    return null;
+  }
+
+  Future<Error?> refreshList() async {
+    var result = await _groceriesListService.getActions(DateTime.now());
+    if (result.err != null) {
+      return result.err;
+    }
+
+    for (var action in result.data!) {
+      print(action);
+    }
+
+    notifyListeners();
     return null;
   }
 

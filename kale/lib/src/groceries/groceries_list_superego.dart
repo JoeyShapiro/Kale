@@ -118,154 +118,59 @@ class _GroceryListState extends State<GroceryList> {
                   Expanded(
                       child: ImageFiltered(
                     imageFilter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                    child: ListView.builder(
-                        controller: scrollController,
-                        itemCount: categories.length + 1, // 1 is for collected
-                        itemBuilder: (BuildContext context, int index) {
-                          if (index < categories.length) {
-                            // if a normal category
-                            final categoryItems = items
-                                .where(
-                                  (element) =>
-                                      (element.category == categories[index] &&
-                                          !element.collected),
-                                )
-                                .toList(growable: false);
-                            return Column(
-                              key: GlobalObjectKey(categories[index]),
-                              children: [
-                                Text(categories[index]),
-                                const Divider(),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const ClampingScrollPhysics(),
-                                  // Providing a restorationId allows the ListView to restore the
-                                  // scroll position when a user leaves and returns to the app after it
-                                  // has been killed while running in the background.
-                                  restorationId: 'sampleItemListView',
-                                  itemCount: categoryItems.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    final item = categoryItems[index];
+                    child: RefreshIndicator(
+                      onRefresh: () => groceriesListController.refreshList(),
+                      child: ListView.builder(
+                          controller: scrollController,
+                          itemCount:
+                              categories.length + 1, // 1 is for collected
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index < categories.length) {
+                              // if a normal category
+                              final categoryItems = items
+                                  .where(
+                                    (element) => (element.category ==
+                                            categories[index] &&
+                                        !element.collected),
+                                  )
+                                  .toList(growable: false);
+                              return Column(
+                                key: GlobalObjectKey(categories[index]),
+                                children: [
+                                  Text(categories[index]),
+                                  const Divider(),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const ClampingScrollPhysics(),
+                                    // Providing a restorationId allows the ListView to restore the
+                                    // scroll position when a user leaves and returns to the app after it
+                                    // has been killed while running in the background.
+                                    restorationId: 'sampleItemListView',
+                                    itemCount: categoryItems.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final item = categoryItems[index];
 
-                                    return Dismissible(
-                                      key: GlobalObjectKey(item.id.toString()),
-                                      background: Container(
-                                        color: Colors.green,
-                                        child: const Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Icon(
-                                              Icons.front_hand_rounded,
-                                            ),
-                                            Icon(
-                                              Icons.check,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      child: ListTile(
-                                        title: Text(item.name),
-                                        subtitle: item.comments != null
-                                            ? Text(item.comments!)
-                                            : null,
-                                        leading: const CircleAvatar(
-                                          // Display the Flutter Logo image asset.
-                                          foregroundImage: AssetImage(
-                                              'assets/images/flutter_logo.png'),
-                                        ),
-                                        trailing: Row(
-                                            mainAxisSize: MainAxisSize.min,
+                                      return Dismissible(
+                                        key:
+                                            GlobalObjectKey(item.id.toString()),
+                                        background: Container(
+                                          color: Colors.green,
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              if (item.match == true)
-                                                const Icon(Icons.crisis_alert)
-                                              else if (item.match == false)
-                                                const Icon(
-                                                  Icons.lens_blur,
-                                                ),
-                                              if (item.importance == true)
-                                                const Icon(
-                                                  Icons.priority_high,
-                                                  color: Colors.green,
-                                                )
-                                              else if (item.importance == false)
-                                                const Icon(Icons.question_mark,
-                                                    color: Colors.green),
-                                            ]),
-                                        onTap: () {
-                                          showItemModal(context, item);
-                                        },
-                                        onLongPress: () {
-                                          print('long press');
-                                        },
-                                      ),
-                                      onDismissed: (direction) {
-                                        final success = items.remove(item);
-                                        if (!success) {
-                                          // only show snackbar for error
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      'error: $success: ${item.id} dismissed $direction')));
-                                        }
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          } else {
-                            final collectedItems = items
-                                .where(
-                                  (element) => element.collected,
-                                )
-                                .toList(growable: false);
-                            return Column(
-                              key: const GlobalObjectKey("collected"),
-                              children: [
-                                const Text("collected"),
-                                const Divider(),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const ClampingScrollPhysics(),
-                                  // Providing a restorationId allows the ListView to restore the
-                                  // scroll position when a user leaves and returns to the app after it
-                                  // has been killed while running in the background.
-                                  restorationId: 'sampleItemListView',
-                                  itemCount: collectedItems.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    final item = collectedItems[index];
-
-                                    return Dismissible(
-                                      key: GlobalObjectKey(item.id.toString()),
-                                      background: Container(
-                                        color: Colors.yellow,
-                                        child: const Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Icon(
-                                              Icons.front_hand_rounded,
-                                            ),
-                                            Icon(
-                                              Icons.cancel,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      child: ListTile(
-                                          title: RichText(
-                                            text: TextSpan(
-                                              text: item.name,
-                                              style: const TextStyle(
-                                                color: Colors.grey,
-                                                decoration:
-                                                    TextDecoration.lineThrough,
+                                              Icon(
+                                                Icons.front_hand_rounded,
                                               ),
-                                            ),
+                                              Icon(
+                                                Icons.check,
+                                              ),
+                                            ],
                                           ),
+                                        ),
+                                        child: ListTile(
+                                          title: Text(item.name),
                                           subtitle: item.comments != null
                                               ? Text(item.comments!)
                                               : null,
@@ -274,29 +179,132 @@ class _GroceryListState extends State<GroceryList> {
                                             foregroundImage: AssetImage(
                                                 'assets/images/flutter_logo.png'),
                                           ),
-                                          onLongPress: () {
-                                            print(item.name);
-                                          },
+                                          trailing: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                if (item.match == true)
+                                                  const Icon(Icons.crisis_alert)
+                                                else if (item.match == false)
+                                                  const Icon(
+                                                    Icons.lens_blur,
+                                                  ),
+                                                if (item.importance == true)
+                                                  const Icon(
+                                                    Icons.priority_high,
+                                                    color: Colors.green,
+                                                  )
+                                                else if (item.importance ==
+                                                    false)
+                                                  const Icon(
+                                                      Icons.question_mark,
+                                                      color: Colors.green),
+                                              ]),
                                           onTap: () {
                                             showItemModal(context, item);
-                                          }),
-                                      onDismissed: (direction) {
-                                        final success = items.remove(item);
-                                        if (!success) {
-                                          // only show snackbar for error
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(
-                                                      'error: $success: ${item.id} dismissed $direction')));
-                                        }
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                          }
-                        }),
+                                          },
+                                          onLongPress: () {
+                                            print('long press');
+                                          },
+                                        ),
+                                        onDismissed: (direction) {
+                                          final success = items.remove(item);
+                                          if (!success) {
+                                            // only show snackbar for error
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'error: $success: ${item.id} dismissed $direction')));
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            } else {
+                              final collectedItems = items
+                                  .where(
+                                    (element) => element.collected,
+                                  )
+                                  .toList(growable: false);
+                              return Column(
+                                key: const GlobalObjectKey("collected"),
+                                children: [
+                                  const Text("collected"),
+                                  const Divider(),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: const ClampingScrollPhysics(),
+                                    // Providing a restorationId allows the ListView to restore the
+                                    // scroll position when a user leaves and returns to the app after it
+                                    // has been killed while running in the background.
+                                    restorationId: 'sampleItemListView',
+                                    itemCount: collectedItems.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final item = collectedItems[index];
+
+                                      return Dismissible(
+                                        key:
+                                            GlobalObjectKey(item.id.toString()),
+                                        background: Container(
+                                          color: Colors.yellow,
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Icon(
+                                                Icons.front_hand_rounded,
+                                              ),
+                                              Icon(
+                                                Icons.cancel,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        child: ListTile(
+                                            title: RichText(
+                                              text: TextSpan(
+                                                text: item.name,
+                                                style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
+                                                ),
+                                              ),
+                                            ),
+                                            subtitle: item.comments != null
+                                                ? Text(item.comments!)
+                                                : null,
+                                            leading: const CircleAvatar(
+                                              // Display the Flutter Logo image asset.
+                                              foregroundImage: AssetImage(
+                                                  'assets/images/flutter_logo.png'),
+                                            ),
+                                            onLongPress: () {
+                                              print(item.name);
+                                            },
+                                            onTap: () {
+                                              showItemModal(context, item);
+                                            }),
+                                        onDismissed: (direction) {
+                                          final success = items.remove(item);
+                                          if (!success) {
+                                            // only show snackbar for error
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                                    content: Text(
+                                                        'error: $success: ${item.id} dismissed $direction')));
+                                          }
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              );
+                            }
+                          }),
+                    ),
                   )),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
