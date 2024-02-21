@@ -1,11 +1,19 @@
 class Action {
+  // metadata
+  final int id;
   final DateTime time;
-  final String event;
+  final String username;
 
-  Action(this.time, this.event);
+  // item info
+  final String event;
+  final int itemId;
+  final String? content;
+
+  Action(
+      this.id, this.time, this.username, this.event, this.itemId, this.content);
 
   @override
   String toString() {
-    return 'time: "$time"; event: "$event"';
+    return 'id: "$id"; time: "$time"; username: "$username"; event: "$event"; item_id: "$itemId"; content: "$content"';
   }
 }

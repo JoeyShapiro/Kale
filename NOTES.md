@@ -188,3 +188,5 @@ the controller handles items, and the view simply views them.
 the view should not handle convertint actions to items
 wait what does the model do, does it only send data
 gpt claims the model handles it, but how. i kinda like my idea
+
+i think the best idea is to parse when i need it

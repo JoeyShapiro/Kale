@@ -60,7 +60,10 @@ class GroceriesListService {
   }
 
   Future<Result<List<kale.Action>>> getActions(DateTime since) async {
-    var dummyActions = <kale.Action>[kale.Action(DateTime.now(), "ADD")];
+    var dummyActions = <kale.Action>[
+      kale.Action(1, DateTime.now(), "bob", "ADD", 1,
+          '{ "id": 3, "name": "cookies", "category": "deli", "comments": "always could use cookies", "collected": false, "importance": null, "match": null, "addedBy": "zelda", "lastUpdated": "${DateTime.now()}"}')
+    ];
 
     return Result(data: dummyActions);
   }

@@ -21,6 +21,17 @@ class GroceryItem {
   final String addedBy;
   final DateTime lastUpdated;
 
+  GroceryItem.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        name = json["name"],
+        category = json['category'],
+        comments = json['comments'],
+        collected = json['collected'],
+        importance = json['importance'],
+        match = json['match'],
+        addedBy = json['addedBy'],
+        lastUpdated = DateTime.parse(json['lastUpdated']);
+
   @override
   String toString() {
     return 'id: "$id"; name: "$name"; category: "$category"; comments: "$comments"; collected: "$collected"; '

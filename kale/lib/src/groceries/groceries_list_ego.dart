@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:kale/src/groceries/grocery_item.dart';
 
@@ -83,6 +85,13 @@ class GroceriesListController with ChangeNotifier {
 
     for (var action in result.data!) {
       print(action);
+
+      if (action.content != null) {
+        if (action.event == "ADD") {
+          var content = GroceryItem.fromJson(json.decode(action.content!));
+          print("${content.runtimeType}, $content");
+        }
+      }
     }
 
     notifyListeners();
